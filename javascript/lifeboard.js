@@ -1,11 +1,11 @@
 "use strict";
 
 function mapSingleToTuple(single, tup){
-	var array = new Array(tup.length);
+	var array = [];//new Array(tup.length);
 	
 	for (var i = 0; i < tup.length; i++)
 	{
-		array[i] = (single[tup[i]]);
+		array.push(single[tup[i]]);
 	}
 	
 	return array;
@@ -202,7 +202,6 @@ LifeBoard.prototype.get = function(x, y){
       return 0;
 	}
 	  
-	 	console.log("lifeboard.get");
     return this._root.get(x - this._originx, y - this._originy);
 };
 
@@ -213,7 +212,7 @@ LifeBoard.prototype.getAll = function(rect){ //rect = None
 };
 
 LifeBoard.prototype.set = function(x, y, value){
-    if (this.get(x, y) == value){
+    if (this.get(x, y) === value){
 		return;
 	}
 	  

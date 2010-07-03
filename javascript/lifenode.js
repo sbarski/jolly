@@ -40,6 +40,8 @@ function LifeNode(board, id, children){ //Class LifeNode
 
 		this._level = this.nw.level() + 1;
 		this._count = this.nw.count() + this.ne.count() + this.sw.count() + this.se.count();
+		
+		console.log("LifeNode: " + id + ", " + this._count);
 	 }
 	 
     this._id = id;
@@ -70,13 +72,16 @@ LifeNode.prototype.get = function(x, y){
     //"Returns the value of the cell at x, y"
     if (this._level === 0){
 		return this._count;
+		
 	}
 	
-    var half = this.width() / 2;
+    var half = Math.floor(this.width() / 2);
 	
-	var index = Math.floor(x / half) + Math.floor(y / (half * 2));
+	//var index = Math.floor(x / half) + Math.floor(y / Math.floor(half * 2));
 	
-		 	console.log("lifenode.get" + ", " + index + ", " + this._level + ", " + this._count);
+	var index = Math.floor(x / half) + (Math.floor(y / half) * 2);
+	
+		 	//console.log("lifenode.get" + ", " + index + ", " + this._level + ", " + this._count);
 	
     var child = this._children[index];
     return child.get(x % half, y % half);
@@ -84,15 +89,17 @@ LifeNode.prototype.get = function(x, y){
 
 LifeNode.prototype.set = function(x, y, value){
 	//"Returns a near-copy of the node with the value at x, y modified"
-    if (this._level == 0){
-		return this._board.single()[value];
+    if (this._level === 0){
+		return this._board._single[value];
 	}
 	
-	var half = this.width() / 2;
-	var index = Math.floor(x / half) + Math.floor(y / (half * 2));
+	var half = Math.floor(this.width() / 2);
+	//var index = Math.floor(x / half) + Math.floor(y / Math.floor(half * 2));
+
+	var index = Math.floor(x / half) + (Math.floor(y / half) * 2);
 	
 	
-    var mychildren = this._children;//.clone();
+    var mychildren = extend(this._children, null);
     //console.log("lifenode.set" + index + ", " + value);
 	
 	mychildren[index] = mychildren[index].set(x % half, y % half, value);
@@ -202,7 +209,7 @@ LifeNode.prototype.nextCenter = function(steps){
     else
 	{
 		var step1 = 0;
-		var halfsteps = this.gensteps() / 2;
+		var halfsteps = Math.floor(this.gensteps() / 2);
       
 		if (steps <= halfsteps){
 			step1 = 0;
@@ -288,19 +295,24 @@ LifeNode.prototype.gensteps = function(){
     return 1 << (this._level - 2);
 };
 
-LifeNode.prototype.clone = function() {
-  var newObj = (this instanceof Array) ? [] : {};
-  for (i in this) 
-  {
-    if (i == 'clone') continue;
-    
-	if (this[i] && typeof this[i] == "object" && this[i] != "_board") {
-      newObj[i] = this[i].clone();
-    } 
-	else 
-	{
-		newObj[i] = this[i];
-	}
-  } 
-	return newObj;
-};
+/*
+ * http://stackoverflow.com/questions/122102/what-is-the-most-efficent-way-to-clone-a-javascript-object
+ *
+ */
+function extend(from, to)
+{
+    if (from == null || typeof from != "object") return from;
+    if (from.constructor != Object && from.constructor != Array) return from;
+    if (from.constructor == Date || from.constructor == RegExp || from.constructor == Function ||
+        from.constructor == String || from.constructor == Number || from.constructor == Boolean)
+        return new from.constructor(from);
+
+    to = to || new from.constructor();
+
+    for (var name in from)
+    {
+        to[name] = typeof to[name] == "undefined" ? this.extend(from[name], null) : to[name];
+    }
+
+    return to;
+}

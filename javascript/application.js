@@ -84,6 +84,7 @@ function update(x, y)
 		}
 		else
 		{
+			gDrawingContext.clearRect(x*kPieceWidth, y*kPieceHeight, kPieceWidth, kPieceHeight);
 			//Clear square
 		}
       
