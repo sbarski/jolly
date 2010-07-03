@@ -41,7 +41,7 @@ function LifeNode(board, id, children){ //Class LifeNode
 		this._level = this.nw.level() + 1;
 		this._count = this.nw.count() + this.ne.count() + this.sw.count() + this.se.count();
 		
-		console.log("LifeNode: " + id + ", " + this._count);
+		//console.log("LifeNode: " + id + ", " + this._count);
 	 }
 	 
     this._id = id;

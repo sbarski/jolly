@@ -6,11 +6,11 @@ var gBorderColour = "#000";
 var gGridColour = "#FFFF99";
 var gSelecedColour = "#000000";
 
-var kBoardWidth = 10;
-var kBoardHeight = 10;
+var kBoardWidth = 50;
+var kBoardHeight = 50;
 
-var kPieceWidth = 40;
-var kPieceHeight= 40;
+var kPieceWidth = 10;
+var kPieceHeight= 10;
 
 var kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
 var kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
@@ -56,7 +56,6 @@ function initEngine(canvasElement)
     }
 	
 	initHashlife(kBoardWidth, kBoardHeight);
-	runHashlife();
 }
 
 /*

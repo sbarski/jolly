@@ -12,7 +12,7 @@ var offsetx = 0;
 
 var curx = 0;
 var cury = 0;
-var steps = 0;
+var simulationSteps = 0;
 
 var tickSpeed = 100;
 var tickIteration = 0;
@@ -32,15 +32,15 @@ function initHashlife(kBoardWidth, kBoardHeight)
 	offsetx = 0;//-boardWidth / 2;
 	
 	curx = cury = steps = 0;
+	redraw();
 }
 
 function runHashlife()
 {
-	redraw();
-	//tickInterval = setInterval(function () {
-		//redraw();
-		//step(1);
-	//}, tickSpeed);
+	//
+	tickInterval = setInterval(function () {
+		step(1);
+	}, tickSpeed);
 }
 
 function visibleRect()
@@ -56,21 +56,23 @@ function redraw()
 	var cells = board.getAll(visibleRect());
 	
 	//for (x, y) in cells <--gets a tuple in the original, need to fix this
-	for (var position; position < cells.length; position++)
+	for (var position = 0; position < cells.length; position++)
 	{
-		var x = position[0];
-		var y = position[1];
+		var x = cells[position][0]
+		var y = cells[position][1];
 	
-		if (x - offsetx === offsetx + boardWidth - 1)
-		{
+		//if (x - offsetx === offsetx + boardWidth - 1)
+		//{
 			gDrawingContext.fillRect(x*kPieceWidth, y*kPieceHeight, kPieceWidth, kPieceHeight);
 			//self.screen.insch(y - self.offsety, x - self.offsetx, ord('*'))
-		}
-		else
-		{
+		//}
+		//else
+		//{
 			//self.screen.addch(y - self.offsety, x - self.offsetx, ord('*'))
-		}
+		//}
 	}
+	
+			document.getElementById("steps").innerHTML = "Steps: " + simulationSteps;
 }
 
 function update(x, y)
@@ -87,6 +89,8 @@ function update(x, y)
 			gDrawingContext.clearRect(x*kPieceWidth, y*kPieceHeight, kPieceWidth, kPieceHeight);
 			//Clear square
 		}
+		
+
       
 		//redraw();
 		//screen.addch(y - self.offsety, x - self.offsetx, ch)
@@ -97,10 +101,10 @@ function toggle(curx, cury)
 {
 
     var value = 1 - this.board.get(curx, cury);
-		console.log("toggle" + ", " + value);
+	//console.log("toggle" + ", " + value);
     
 	board.set(curx, cury, value);
-	console.log("end toggle");
+	//console.log("end toggle");
     update(curx, cury);
     // var value = 1 - this.board.get(curx+this.board._originx, cury+this.board._originy);
     
@@ -123,7 +127,7 @@ function step(steps)
 		collect();
 		
     board.step(steps);
-    //steps = self.steps + steps;
+    simulationSteps += steps;
     redraw();
 }
 
@@ -190,17 +194,17 @@ function drawGrid()
 	gDrawingContext.fillStyle = gSelecedColour;
 	gDrawingContext.strokeStyle = gBorderColour;
 
-	/* vertical lines */
-    for (var x = offsetx; x <= kPixelWidth; x += kPieceWidth) {
-		gDrawingContext.moveTo(0.5 + x, 0);
-		gDrawingContext.lineTo(0.5 + x, kPixelHeight);
-    }
+	// /* vertical lines */
+    // for (var x = offsetx; x <= kPixelWidth; x += kPieceWidth) {
+		// gDrawingContext.moveTo(0.5 + x, 0);
+		// gDrawingContext.lineTo(0.5 + x, kPixelHeight);
+    // }
     
-    /* horizontal lines */
-    for (var y = offsety; y <= kPixelHeight; y += kPieceHeight) {
-		gDrawingContext.moveTo(0, 0.5 + y);
-		gDrawingContext.lineTo(kPixelWidth, 0.5 +  y);
-    }
+    // /* horizontal lines */
+    // for (var y = offsety; y <= kPixelHeight; y += kPieceHeight) {
+		// gDrawingContext.moveTo(0, 0.5 + y);
+		// gDrawingContext.lineTo(kPixelWidth, 0.5 +  y);
+    // }
     
     /* draw it! */
     gDrawingContext.strokeStyle = gGridColour;

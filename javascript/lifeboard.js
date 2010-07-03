@@ -98,18 +98,18 @@ LifeBoard.prototype.canonicalize = function(node, trans){
 		return node;
 	}
     
-	if (typeof(trans[node.id()]) != "undefined")
+	if (typeof(trans[node.id()]) == "undefined")
 	{
-		this.nw = node._children[0];
-		this.ne = node._children[1];
-		this.sw = node._children[2];
-		this.se = node._children[3];
+		var nw = node._children[0];
+		var ne = node._children[1];
+		var sw = node._children[2];
+		var se = node._children[3];
 		
-      trans[node.id()] = this._getnode(
-        this._canonicalize(nw, trans),
-        this._canonicalize(ne, trans),
-        this._canonicalize(sw, trans),
-        this._canonicalize(se, trans));
+      trans[node.id()] = this.getnode(
+        this.canonicalize(nw, trans),
+        this.canonicalize(ne, trans),
+        this.canonicalize(sw, trans),
+        this.canonicalize(se, trans));
 	}
 	
     return trans[node.id()];
@@ -129,7 +129,7 @@ LifeBoard.prototype.collect = function(){
 	this._empty.push(this._memo[[0, 0, 0, 0]]);
     
 	var old = this._memo; 
-	this._memo = new Array(16);
+	this._memo = [];
     
 	for (var i = 0; i < 16; i++)
 	{
@@ -157,17 +157,19 @@ LifeBoard.prototype.trim = function(){
 			{
 				sub = this._root.subquad(index);
         
-				if (sub.count == this._root.count)
+				if (sub.count() == this._root.count())
 				{
-					this._originx += sub.width() / 2 * (index % 3);
-					this._originy += sub.width() / 2 * (index / 3);
+					this._originx += Math.floor(sub.width() / 2) * Math.floor(index % 3);
+					this._originy += Math.floor(sub.width() / 2) * Math.floor(index / 3);
 					this._root = sub;
 					break;
 				}
-				
-				return; //--? I think
+				sub = null;
+				//return; //--? I think
 			}
 			
+			if (sub === null)
+				return;
 			//if (this._root.count != sub.count){
 			//	return;
 			//}		
