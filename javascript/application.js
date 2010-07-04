@@ -89,11 +89,6 @@ function update(x, y)
 			gDrawingContext.clearRect(x*kPieceWidth, y*kPieceHeight, kPieceWidth, kPieceHeight);
 			//Clear square
 		}
-		
-
-      
-		//redraw();
-		//screen.addch(y - self.offsety, x - self.offsetx, ch)
 	}
 }
 

@@ -6,8 +6,8 @@ var gBorderColour = "#000";
 var gGridColour = "#FFFF99";
 var gSelecedColour = "#000000";
 
-var kBoardWidth = 5;
-var kBoardHeight = 5;
+var kBoardWidth = 40;
+var kBoardHeight = 40;
 
 var kPieceWidth = 40;
 var kPieceHeight= 40;
