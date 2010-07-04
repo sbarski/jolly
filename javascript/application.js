@@ -72,7 +72,7 @@ function redraw()
 		//}
 	}
 	
-			document.getElementById("steps").innerHTML = "Steps: " + simulationSteps;
+	document.getElementById("steps").innerHTML = "Steps: " + simulationSteps;
 }
 
 function update(x, y)
@@ -194,17 +194,17 @@ function drawGrid()
 	gDrawingContext.fillStyle = gSelecedColour;
 	gDrawingContext.strokeStyle = gBorderColour;
 
-	// /* vertical lines */
-    // for (var x = offsetx; x <= kPixelWidth; x += kPieceWidth) {
-		// gDrawingContext.moveTo(0.5 + x, 0);
-		// gDrawingContext.lineTo(0.5 + x, kPixelHeight);
-    // }
+	/* vertical lines */
+    for (var x = offsetx; x <= kPixelWidth; x += kPieceWidth) {
+		gDrawingContext.moveTo(0.5 + x, 0);
+		gDrawingContext.lineTo(0.5 + x, kPixelHeight);
+    }
     
-    // /* horizontal lines */
-    // for (var y = offsety; y <= kPixelHeight; y += kPieceHeight) {
-		// gDrawingContext.moveTo(0, 0.5 + y);
-		// gDrawingContext.lineTo(kPixelWidth, 0.5 +  y);
-    // }
+    /* horizontal lines */
+    for (var y = offsety; y <= kPixelHeight; y += kPieceHeight) {
+		gDrawingContext.moveTo(0, 0.5 + y);
+		gDrawingContext.lineTo(kPixelWidth, 0.5 +  y);
+    }
     
     /* draw it! */
     gDrawingContext.strokeStyle = gGridColour;

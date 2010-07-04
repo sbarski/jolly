@@ -6,11 +6,11 @@ var gBorderColour = "#000";
 var gGridColour = "#FFFF99";
 var gSelecedColour = "#000000";
 
-var kBoardWidth = 50;
-var kBoardHeight = 50;
+var kBoardWidth = 5;
+var kBoardHeight = 5;
 
-var kPieceWidth = 10;
-var kPieceHeight= 10;
+var kPieceWidth = 40;
+var kPieceHeight= 40;
 
 var kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
 var kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
@@ -69,37 +69,6 @@ function setCanvasDimensions()
 	kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
 	kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
 }
-
-/*
- *	Draws and displays the canvas for the user
- */
-function drawCanvas()
-{
-
-	
-	// if (root != null)
-		// drawSquare(root)
-}
-
-// function drawSquare(node)
-// {
-	// //gDrawingContext.moveTo(node.x, node.y);
-	// var x = node.x()+0.5;
-	// var y = node.y()+0.5;
-	// var width = node.width()-0.5;
-	// var height = node.height()-0.5;
-	
-	// if (node.isSelected())
-		// gDrawingContext.fillRect(x, y, width, height);
-	// else
-		// gDrawingContext.strokeRect(x, y, width, height);
-
-	// if (node.children() != null)
-	// {
-		// for(var i = 0; i < node.children().length; i++)
-			// drawSquare(node.children()[i]);
-	// }
-// }
 
 /*
  *	Handles mouse clicks on the canvas
