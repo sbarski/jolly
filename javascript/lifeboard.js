@@ -117,7 +117,7 @@ LifeBoard.prototype.canonicalize = function(node, trans){
 
 LifeBoard.prototype.clear = function(self){
     this._root = this._single[0];
-    this._collect();
+    this.collect();
 };
 
 LifeBoard.prototype.collect = function(){
@@ -255,6 +255,7 @@ LifeBoard.prototype.step = function(steps){
 LifeBoard.prototype.count = function(){
     return this._root.count;
 };
+
 
 LifeBoard.prototype.clone = function() {
   var newObj = (this instanceof Array) ? [] : {};

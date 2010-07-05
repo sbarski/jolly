@@ -36,30 +36,32 @@ module("basic hashlife tests", {
 test("add and remove life", function() {
 	expect(14);
 	
-	toggle(0, 0);
-	toggle(0, 1);
-	toggle(1, 0);
-	toggle(1, 1);
+	var board = lifeGame.board();
+	
+	lifeGame.toggle(0, 0);
+	lifeGame.toggle(0, 1);
+	lifeGame.toggle(1, 0);
+	lifeGame.toggle(1, 1);
 	
 	ok(board.get(0, 0), "added life at 0,0: OK");
 	ok(board.get(0, 1), "added life at 0,1: OK");
 	ok(board.get(1, 0), "added life at 1,0: OK");
 	ok(board.get(1, 1), "added life at 1,1: OK");
 	
-	toggle(0, 0);
-	toggle(0, 1);
-	toggle(1, 0);
-	toggle(1, 1);
+	lifeGame.toggle(0, 0);
+	lifeGame.toggle(0, 1);
+	lifeGame.toggle(1, 0);
+	lifeGame.toggle(1, 1);
 	
 	ok(board.get(0, 0) === 0, "removed life at 0,0: OK");
 	ok(board.get(0, 1) === 0, "removed life at 0,1: OK");
 	ok(board.get(1, 0) === 0, "removed life at 1,0: OK");
 	ok(board.get(1, 1) === 0, "removed life at 1,1: OK");
 	
-	toggle(9,9);
-	toggle(9,10);
-	toggle(10,9);
-	toggle(10,10);
+	lifeGame.toggle(9,9);
+	lifeGame.toggle(9,10);
+	lifeGame.toggle(10,9);
+	lifeGame.toggle(10,10);
 	
 	ok(board.get(9,9), "added life at 9,9: OK");
 	ok(board.get(9,10), "added life at 9,10: OK");
@@ -68,35 +70,40 @@ test("add and remove life", function() {
 });
 
 test("visible rect", function() {
-	toggle(9,9);
-	toggle(9,10);
-	toggle(10,9);
-	toggle(10,10);
+	lifeGame.toggle(9,9);
+	lifeGame.toggle(9,10);
+	lifeGame.toggle(10,9);
+	lifeGame.toggle(10,10);
 	
-	var cells = board.getAll(visibleRect());
+	var board = lifeGame.board();
+	var visibleRect = lifeGame.getVisibleRect();
+	var cells = board.getAll(visibleRect);
 	
 	equals(cells.length, 1, "visible rect: OK");
 	
-	toggle(0,0);
-	toggle(0,1);
-	toggle(-1,0);
-	toggle(-1,-1);
+	lifeGame.toggle(0,0);
+	lifeGame.toggle(0,1);
+	lifeGame.toggle(-1,0);
+	lifeGame.toggle(-1,-1);
 	
-	cells = board.getAll(visibleRect());
+	cells = board.getAll(visibleRect);
 	equals(cells.length, 3, "visible rect: OK");
 	
-	toggle(5, 5);
-	toggle(5, 6);
-	toggle(6, 5);
-	toggle(6, 6);
+	lifeGame.toggle(5, 5);
+	lifeGame.toggle(5, 6);
+	lifeGame.toggle(6, 5);
+	lifeGame.toggle(6, 6);
 	
-	cells = board.getAll(visibleRect());
+	cells = board.getAll(visibleRect);
 	equals(cells.length, 7, "visible rect: OK");
 });
+
+var board = null;
 
 module("rule tests", {
 	setup: function(){
 		var hashlife = initEngine(null);
+		board = lifeGame.board();
 		ok(true);
 	},
 	teardown: function(){
@@ -106,12 +113,12 @@ module("rule tests", {
 });
 
 test("block", function() {
-	toggle(1, 1);
-	toggle(1, 2);
-	toggle(2, 1);
-	toggle(2, 2);
+	lifeGame.toggle(1, 1);
+	lifeGame.toggle(1, 2);
+	lifeGame.toggle(2, 1);
+	lifeGame.toggle(2, 2);
 	
-	step(1);
+	lifeGame.step(1);
 	
 	ok(board.get(1, 1), "1,1: OK");
 	ok(board.get(1, 2), "1,2: OK");
@@ -123,12 +130,12 @@ test("block", function() {
 });
 
 test("beehive", function() {
-	toggle(0, 2);
-	toggle(1, 1);
-	toggle(1, 3);
-	toggle(2, 1);
-	toggle(2, 3);
-	toggle(3, 2);
+	lifeGame.toggle(0, 2);
+	lifeGame.toggle(1, 1);
+	lifeGame.toggle(1, 3);
+	lifeGame.toggle(2, 1);
+	lifeGame.toggle(2, 3);
+	lifeGame.toggle(3, 2);
 
 	step(1);
 	
@@ -144,13 +151,13 @@ test("beehive", function() {
 });
 
 test("loaf", function() {
-	toggle(0, 2);
-	toggle(1, 1);
-	toggle(1, 3);
-	toggle(2, 1);
-	toggle(2, 4);
-	toggle(3, 2);
-	toggle(3, 3);
+	lifeGame.toggle(0, 2);
+	lifeGame.toggle(1, 1);
+	lifeGame.toggle(1, 3);
+	lifeGame.toggle(2, 1);
+	lifeGame.toggle(2, 4);
+	lifeGame.toggle(3, 2);
+	lifeGame.toggle(3, 3);
 
 	step(1);
 	
@@ -168,11 +175,11 @@ test("loaf", function() {
 });
 
 test("boat", function() {
-	toggle(1, 1);
-	toggle(1, 2);
-	toggle(2, 1);
-	toggle(2, 3);
-	toggle(3, 2);
+	lifeGame.toggle(1, 1);
+	lifeGame.toggle(1, 2);
+	lifeGame.toggle(2, 1);
+	lifeGame.toggle(2, 3);
+	lifeGame.toggle(3, 2);
 	
 	step(1);
 	
@@ -187,9 +194,9 @@ test("boat", function() {
 });
 
 test("blinker", function() {
-	toggle(1, 1);
-	toggle(1, 2);
-	toggle(1, 3);
+	lifeGame.toggle(1, 1);
+	lifeGame.toggle(1, 2);
+	lifeGame.toggle(1, 3);
 	
 	step(1);
 	
@@ -211,11 +218,11 @@ test("blinker", function() {
 });
 
 test("glider", function() {
-	toggle(1, 1);
-	toggle(2, 2);
-	toggle(2, 3);
-	toggle(1, 3);
-	toggle(0, 3);
+	lifeGame.toggle(1, 1);
+	lifeGame.toggle(2, 2);
+	lifeGame.toggle(2, 3);
+	lifeGame.toggle(1, 3);
+	lifeGame.toggle(0, 3);
 	
 	step(1);
 	

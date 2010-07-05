@@ -1,6 +1,8 @@
 var gCanvasElement = null;
 var gDrawingContext = null;
 
+var lifeGame = null;
+
 var gBoardColour = "#ccc";
 var gBorderColour = "#000";
 var gGridColour = "#FFFF99";
@@ -55,7 +57,7 @@ function initEngine(canvasElement)
         alert("Your browser will not work for this example.");
     }
 	
-	initHashlife(kBoardWidth, kBoardHeight);
+	lifeGame = new LifeGame(kBoardWidth, kBoardHeight, gDrawingContext);
 }
 
 /*
@@ -75,9 +77,9 @@ function setCanvasDimensions()
  */
 function onMouseClick(e)
 {
-	var cell = getCursorPosition(e);
+	var rect = getCursorPosition(e);
 	
-	clickOnCell(cell);
+	lifeGame.toggle(rect.x, rect.y);
 }
 
 /*
@@ -104,16 +106,39 @@ function getCursorPosition(e)
     x = Math.min(x, kBoardWidth * kPieceWidth);
     y = Math.min(y, kBoardHeight * kPieceHeight);
     
-	var cell = new Cell(Math.floor(x/kPieceHeight),Math.floor(y/kPieceWidth));
+	var rect = new Rect(Math.floor(x/kPieceHeight),Math.floor(y/kPieceWidth));
 
-	return cell;
+	return rect;
 
+}
+
+function step()
+{
+	lifeGame.step(1);
+}
+
+function run()
+{
+	lifeGame.run();
+}
+
+function stop()
+{
+	lifeGame.stop();
+}
+
+function clear()
+{
+	lifeGame.clear();
 }
 
 /*
  *  Stores the cell row and column that the user clicked on
  */
-function Cell(row, column) {
-    this.row = row;
-    this.column = column;
+function Rect(x, y, width, height)
+{
+	this.x = x;
+	this.y = y;
+	this.width = width;
+	this.height = height;
 }

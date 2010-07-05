@@ -20,9 +20,10 @@
 <body onload="initEngine(null);">
 
 <div id="navigation">
-	<a href="javascript:step(1)">Step Forward</a>
-	| <a href="javascript:redraw()">Redraw</a>
-	|  <a href="javascript:runHashlife()" id="runButton">Run Simulation</a>
+	<a href="javascript:step()">Step Forward</a>
+	|  <a href="javascript:run()" id="runButton">Run Simulation</a>
+	| 	<a href="javascript:stop()" id="stopButton">Stop Simulation</a>
+	| 	<a href="javascript:clear()" id="clearButton">Clear Simulation</a>
 </div>
 <div id="canvasSpace"></div>
 <div id="steps">Steps: 0</div>
