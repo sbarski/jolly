@@ -18,9 +18,10 @@ var tickSpeed = 100;
 var tickIteration = 0;
 var tickInterval = null;
 
-/*
- * Create the quadtree
- */
+var oldLifePosition = [];
+
+var isSimulationRunning = false;
+
 function initHashlife(kBoardWidth, kBoardHeight)
 {
 	board = new LifeBoard();
@@ -32,15 +33,29 @@ function initHashlife(kBoardWidth, kBoardHeight)
 	offsetx = 0;//-boardWidth / 2;
 	
 	curx = cury = steps = 0;
-	redraw();
+	drawGrid();
 }
 
 function runHashlife()
 {
-	//
-	tickInterval = setInterval(function () {
-		step(1);
-	}, tickSpeed);
+	isSimulationRunning = !isSimulationRunning;
+	
+	if (!isSimulationRunning)
+	{
+		if (tickInterval !== null)
+			clearInterval(tickInterval);
+			
+		simulationSteps = 0;
+		document.getElementById("runButton").innerHTML = "Start Simulation";
+	}
+	else
+	{	
+		document.getElementById("runButton").innerHTML = "Stop Simulation";
+	
+		tickInterval = setInterval(function () {
+			step(1);
+		}, tickSpeed);
+	}
 }
 
 function visibleRect()
@@ -51,25 +66,30 @@ function visibleRect()
 function redraw()
 {
 	//Update the drawing here
-	drawGrid();
+	//drawGrid();
 	
 	var cells = board.getAll(visibleRect());
 	
-	//for (x, y) in cells <--gets a tuple in the original, need to fix this
+	gDrawingContext.fillStyle = gBoardColour;
+	for (var i = 0; i < oldLifePosition.length; i++)
+	{
+		var x = oldLifePosition[i].x;
+		var y = oldLifePosition[i].y;
+		
+		gDrawingContext.fillRect(x*kPieceWidth+1, y*kPieceHeight+1, kPieceWidth-1, kPieceHeight-1);
+	}
+	
+	oldLifePosition = [];
+
+	gDrawingContext.fillStyle = gSelectedColour;
 	for (var position = 0; position < cells.length; position++)
 	{
 		var x = cells[position][0]
 		var y = cells[position][1];
-	
-		//if (x - offsetx === offsetx + boardWidth - 1)
-		//{
-			gDrawingContext.fillRect(x*kPieceWidth, y*kPieceHeight, kPieceWidth, kPieceHeight);
-			//self.screen.insch(y - self.offsety, x - self.offsetx, ord('*'))
-		//}
-		//else
-		//{
-			//self.screen.addch(y - self.offsety, x - self.offsetx, ord('*'))
-		//}
+		
+		gDrawingContext.fillRect(x*kPieceWidth+1, y*kPieceHeight+1, kPieceWidth-1, kPieceHeight-1);	
+
+		oldLifePosition.push(new rect(x,y,0,0));
 	}
 	
 	document.getElementById("steps").innerHTML = "Steps: " + simulationSteps;
@@ -81,13 +101,15 @@ function update(x, y)
 	{
 		if (board.get(x, y))
 		{
-			//Draw square
-			gDrawingContext.fillRect(x*kPieceWidth, y*kPieceHeight, kPieceWidth, kPieceHeight);
+			oldLifePosition.push(new rect(x,y,0,0));
+		
+			gDrawingContext.fillStyle = gSelectedColour;
+			gDrawingContext.fillRect(x*kPieceWidth+1, y*kPieceHeight+1, kPieceWidth-1, kPieceHeight-1);
 		}
 		else
 		{
-			gDrawingContext.clearRect(x*kPieceWidth, y*kPieceHeight, kPieceWidth, kPieceHeight);
-			//Clear square
+			gDrawingContext.fillStyle = gBoardColour;
+			gDrawingContext.fillRect(x*kPieceWidth+1, y*kPieceHeight+1, kPieceWidth-1, kPieceHeight-1);
 		}
 	}
 }
@@ -186,7 +208,7 @@ function drawGrid()
 	gDrawingContext.fillStyle = gBoardColour;
 	gDrawingContext.fillRect(0, 0, kPixelWidth, kPixelHeight);
 	
-	gDrawingContext.fillStyle = gSelecedColour;
+	gDrawingContext.fillStyle = gSelectedColour;
 	gDrawingContext.strokeStyle = gBorderColour;
 
 	/* vertical lines */

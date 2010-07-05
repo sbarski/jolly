@@ -4,13 +4,13 @@ var gDrawingContext = null;
 var gBoardColour = "#ccc";
 var gBorderColour = "#000";
 var gGridColour = "#FFFF99";
-var gSelecedColour = "#000000";
+var gSelectedColour = "#000000";
 
-var kBoardWidth = 40;
-var kBoardHeight = 40;
+var kBoardWidth = 50;
+var kBoardHeight = 50;
 
-var kPieceWidth = 40;
-var kPieceHeight= 40;
+var kPieceWidth = 25;
+var kPieceHeight= 25;
 
 var kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
 var kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
