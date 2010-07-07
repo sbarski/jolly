@@ -90,7 +90,7 @@ LifeNode.prototype.get = function(x, y){
 LifeNode.prototype.set = function(x, y, value){
 	//"Returns a near-copy of the node with the value at x, y modified"
     if (this._level === 0){
-		return this._board._single[value];
+		return this._board.single(value);
 	}
 	
 	var half = Math.floor(this.width() / 2);
@@ -295,10 +295,6 @@ LifeNode.prototype.gensteps = function(){
     return 1 << (this._level - 2);
 };
 
-/*
- * http://stackoverflow.com/questions/122102/what-is-the-most-efficent-way-to-clone-a-javascript-object
- *
- */
 function extend(from, to)
 {
     if (from == null || typeof from != "object") return from;

@@ -7,9 +7,10 @@ var gBoardColour = "#ccc";
 var gBorderColour = "#000";
 var gGridColour = "#FFFF99";
 var gSelectedColour = "#000000";
+var gTrailColour = "#9900FF";
 
-var kBoardWidth = 50;
-var kBoardHeight = 50;
+var kBoardWidth = 20;
+var kBoardHeight = 20;
 
 var kPieceWidth = 25;
 var kPieceHeight= 25;

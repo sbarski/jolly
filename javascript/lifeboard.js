@@ -12,257 +12,245 @@ function mapSingleToTuple(single, tup){
 }
 
 function LifeBoard(){
-	this._originx = 0;
-    this._originy = 0;
+	var that = this;
+
+	var _root = null;
+	
+	var _originx = 0;
+    var _originy = 0;
     
-	var E = new LifeNode(this, 0, null); //we are passing the board, id and children
-	var X = new LifeNode(this, 1, null);
+	var E = new LifeNode(that, 0, null); //we are passing the board, id and children
+	var X = new LifeNode(that, 1, null);
     
-	this._single = [E, X];
-    this._memo = [];
-	this._empty = [];
+	var _single = [E, X];
+    var _memo = [];
+	var _empty = [];
 	
 	for (var i = 0; i < 16; i++)
 	{
-		this.tup = [i & 1, (i & 2) / 2, (i & 4) / 4, (i & 8) / 8];
+		tup = [i & 1, (i & 2) / 2, (i & 4) / 4, (i & 8) / 8];
 	  
-		//var objtup = map(lambda x: this._single[x], tup); //<-- not implemented yet
-		var objtup = mapSingleToTuple(this._single, this.tup);
+		//var objtup = map(lambda x: _single[x], tup); //<-- not implemented yet
+		var objtup = mapSingleToTuple(_single, tup);
 	  
-		this._memo[this.tup] = new LifeNode(this, i + 2, objtup); //<-- not implemented yet
+		_memo[tup] = new LifeNode(this, i + 2, objtup); //<-- not implemented yet
 	}
 	 
 		var index = [0,0,0,0];
 	 
-	this._empty.push(E);
-	this._empty.push(this._memo[index]);
+	_empty.push(E);
+	_empty.push(_memo[index]);
 	
-    this._nextid = 18;
-    this._root = E;
-}
-
-LifeBoard.prototype._root = null;
-LifeBoard.prototype._originx = 0;
-LifeBoard.prototype._originy = 0;
-
-LifeBoard.prototype.root = function(){
-	return this._root;
-};
-
-LifeBoard.prototype.memo = function(){
-	return this._memo;
-};
-
-LifeBoard.prototype.single = function(){
-	return this._single;
-};
-
-LifeBoard.prototype.width = function(){
-	return this._root.width();
-};
-
-LifeBoard.prototype.getnode = function(nw, ne, sw, se){
-	var result = null;
-    var tup = [nw.id(), ne.id(), sw.id(), se.id()];
+    var _nextid = 18;
+    _root = E;
 	
-	var result;// = this._memo[tup];
-	
-	if (typeof(this._memo[tup]) != "undefined"){
-		result = this._memo[tup];
-	}
-	else{
-	    result = new LifeNode(this, this._nextid, [nw, ne, sw, se]);
-		this._nextid = this._nextid + 1;
-		this._memo[tup] = result;
-	}
-	
-	//console.log("lifeboard.getnode");
-	
-	return result;
-};
-
-LifeBoard.prototype.emptynode = function(level){
-	if (level < this._empty.length){
-		return this._empty[level];
-	}
-	
-	var e = this.emptynode(level - 1);
-    var result = this.getnode(e, e, e, e);
-    this._empty.push(result);
-	
-    return result;
-};
-
-LifeBoard.prototype.canonicalize = function(node, trans){
-    if (node.id() < 18){
-		return node;
-	}
-    
-	if (typeof(trans[node.id()]) == "undefined")
-	{
-		var nw = node._children[0];
-		var ne = node._children[1];
-		var sw = node._children[2];
-		var se = node._children[3];
+	function emptynode(level){
+		if (level < _empty.length){
+			return _empty[level];
+		}
 		
-      trans[node.id()] = this.getnode(
-        this.canonicalize(nw, trans),
-        this.canonicalize(ne, trans),
-        this.canonicalize(sw, trans),
-        this.canonicalize(se, trans));
-	}
+		var e = emptynode(level - 1);
+		var result = that.getnode(e, e, e, e);
+		_empty.push(result);
+		
+		return result;
+	};
 	
-    return trans[node.id()];
-};
-
-LifeBoard.prototype.clear = function(self){
-    this._root = this._single[0];
-    this.collect();
-};
-
-LifeBoard.prototype.collect = function(){
-	this.trim();
-	
-	this._empty = [];
-    
-	this._empty.push(this._single[0]);
-	this._empty.push(this._memo[[0, 0, 0, 0]]);
-    
-	var old = this._memo; 
-	this._memo = [];
-    
-	for (var i = 0; i < 16; i++)
-	{
-		var tup = [i & 1, (i & 2) / 2, (i & 4) / 4, (i & 8) / 8]; //<-- not implemented
-		this._memo[tup] = old[tup]; //<-- not implemented
-    }
-	
-	var trans = [];
-    this._root = this.canonicalize(this._root, trans);
-};
-
-LifeBoard.prototype.trim = function(){
-    while (1)
-	{
-		if (this._root.count() === 0){
-				this._root = this._single[0];
+	function canonicalize(node, trans){
+		if (node.id() < 18){
+			return node;
 		}
-				
-		if (this._root.level() <= 1){
-				return;
-		}
-							
-			var sub = null;
-			for (var index = 0; index < 9; index++)
-			{
-				sub = this._root.subquad(index);
-        
-				if (sub.count() == this._root.count())
-				{
-					this._originx += Math.floor(sub.width() / 2) * Math.floor(index % 3);
-					this._originy += Math.floor(sub.width() / 2) * Math.floor(index / 3);
-					this._root = sub;
-					break;
-				}
-				sub = null;
-				//return; //--? I think
-			}
+		
+		if (typeof(trans[node.id()]) == "undefined")
+		{
+			var nw = node._children[0];
+			var ne = node._children[1];
+			var sw = node._children[2];
+			var se = node._children[3];
 			
-			if (sub === null)
-				return;
-			//if (this._root.count != sub.count){
-			//	return;
-			//}		
-	}
-};
-
-LifeBoard.prototype.getDouble = function(){
-    if (this._root.level() == 0){
-		var index = [this._root.id(), 0, 0, 0];
-		this._root = this._memo[index];
-		return;
-	}
-	
-	//console.log("lifeboard.getdouble");
-	
-    this._originx -= this._root.width() / 2;
-    this._originy -= this._root.width() / 2;
-	
-    var e = this.emptynode(this._root.level() - 1);
-	var nw = this._root._children[0];
-	var ne = this._root._children[1];
-	var sw = this._root._children[2];
-	var se = this._root._children[3];
-    
-	this._root = this.getnode(
-      this.getnode(e, e, e, nw), this.getnode(e, e, ne, e),
-      this.getnode(e, sw, e, e), this.getnode(se, e, e, e));
-};
-
-LifeBoard.prototype.get = function(x, y){
-    if (x < this._originx || y < this._originy || x >= this._originx + this._root.width() || y >= this._originy + this._root.width()){
-      return 0;
-	}
-	  
-    return this._root.get(x - this._originx, y - this._originy);
-};
-
-LifeBoard.prototype.getAll = function(rect){ //rect = None
-    cells = [];
-    this._root.getList(cells, this._originx, this._originy, rect);
-    return cells;
-};
-
-LifeBoard.prototype.set = function(x, y, value){
-    if (this.get(x, y) === value){
-		return;
-	}
-	  
-	//console.log("lifeboard.set");
-	var width = this._root.width();
-	
-    while (x < this._originx || y < this._originy || x >= this._originx + width || y >= this._originy + width)
-	{
-		this.getDouble();
-		width = this._root.width();
-	}
-	
-    this._root = this._root.set(x - this._originx, y - this._originy, value);
-};
-
-LifeBoard.prototype.step = function(steps){
-    if (steps == 0){
-		return;
-	}
+		  trans[node.id()] = that.getnode(
+			canonicalize(nw, trans),
+			canonicalize(ne, trans),
+			canonicalize(sw, trans),
+			canonicalize(se, trans));
+		}
 		
-    this.getDouble();
-    this.getDouble();
-    
-	while (steps > this._root.gensteps()){
-		steps -= this._root.gensteps();
-		this._root = this._root.nextCenter(this._root.gensteps());
-		this._originx = this._originx + this._root.width() / 2;
-		this._originy = this._originy + this._root.width() / 2;
-		this.getDouble();
-		this.getDouble();
-	}
+		return trans[node.id()];
+	};
+
+	function trim(){
+		while (1)
+		{
+			if (_root.count() === 0){
+					_root = _single[0];
+			}
+					
+			if (_root.level() <= 1){
+					return;
+			}
+								
+				var sub = null;
+				for (var index = 0; index < 9; index++)
+				{
+					sub = _root.subquad(index);
+			
+					if (sub.count() == _root.count())
+					{
+						_originx += Math.floor(sub.width() / 2) * Math.floor(index % 3);
+						_originy += Math.floor(sub.width() / 2) * Math.floor(index / 3);
+						_root = sub;
+						break;
+					}
+					sub = null;
+					//return; //--? I think
+				}
+				
+				if (sub === null)
+					return;
+				//if (_root.count != sub.count){
+				//	return;
+				//}		
+		}
+	};
 	
-    this._root = this._root.nextCenter(steps);
-    this._originx = this._originx + this._root.width() / 2;
-    this._originy = this._originy + this._root.width() / 2;
-};
+	function getDouble(){
+		if (_root.level() == 0){
+			var index = [_root.id(), 0, 0, 0];
+			_root = _memo[index];
+			return;
+		}
+		
+		_originx -= _root.width() / 2;
+		_originy -= _root.width() / 2;
+		
+		var e = emptynode(_root.level() - 1);
+		var nw = _root._children[0];
+		var ne = _root._children[1];
+		var sw = _root._children[2];
+		var se = _root._children[3];
+		
+		_root = that.getnode(
+		  that.getnode(e, e, e, nw), that.getnode(e, e, ne, e),
+		  that.getnode(e, sw, e, e), that.getnode(se, e, e, e));
+	};
 
-LifeBoard.prototype.count = function(){
-    return this._root.count;
-};
+	
+	this.getnode = function(nw, ne, sw, se){
+		var result = null;
+		var tup = [nw.id(), ne.id(), sw.id(), se.id()];
+		
+		var result;// = _memo[tup];
+		
+		if (typeof(_memo[tup]) != "undefined"){
+			result = _memo[tup];
+		}
+		else{
+			result = new LifeNode(this, _nextid, [nw, ne, sw, se]);
+			_nextid = _nextid + 1;
+			_memo[tup] = result;
+		}
+		
+		//console.log("lifeboard.getnode");
+		
+		return result;
+	};
 
+	this.get = function(x, y){
+		if (x < _originx || y < _originy || x >= _originx + _root.width() || y >= _originy + _root.width()){
+		  return 0;
+		}
+		  
+		return _root.get(x - _originx, y - _originy);
+	};
+	
+	this.getAll = function(rect){ //rect = None
+		cells = [];
+		_root.getList(cells, _originx, _originy, rect);
+		return cells;
+	};
+	
+	this.set = function(x, y, value){
+		if (this.get(x, y) === value){
+			return;
+		}
+		  
+		//console.log("lifeboard.set");
+		var width = _root.width();
+		
+		while (x < _originx || y < _originy || x >= _originx + width || y >= _originy + width)
+		{
+			getDouble();
+			width = _root.width();
+		}
+		
+		_root = _root.set(x - _originx, y - _originy, value);
+	};
+	
+	this.step = function(steps){
+		if (steps == 0){
+			return;
+		}
+			
+		getDouble();
+		getDouble();
+		
+		while (steps > _root.gensteps()){
+			steps -= _root.gensteps();
+			_root = _root.nextCenter(_root.gensteps());
+			_originx = _originx + _root.width() / 2;
+			_originy = _originy + _root.width() / 2;
+			getDouble();
+			getDouble();
+		}
+		
+		_root = _root.nextCenter(steps);
+		_originx = _originx + _root.width() / 2;
+		_originy = _originy + _root.width() / 2;
+	};
+	
+	this.collect = function(){
+		trim();
+		
+		_empty = [];
+		
+		_empty.push(_single[0]);
+		_empty.push(_memo[[0, 0, 0, 0]]);
+		
+		var old = _memo; 
+		_memo = [];
+		
+		for (var i = 0; i < 16; i++)
+		{
+			var tup = [i & 1, (i & 2) / 2, (i & 4) / 4, (i & 8) / 8]; //<-- not implemented
+			_memo[tup] = old[tup]; //<-- not implemented
+		}
+		
+		var trans = [];
+		_root = canonicalize(_root, trans);
+	};
+		
+	this.clear = function(self){
+		_root = _single[0];
+		this.collect();
+	};
+	
+	this.count = function(){
+		return _root.count;
+	};
+	
+	this.root = function(){
+		return _root;
+	};
 
-LifeBoard.prototype.clone = function() {
-  var newObj = (this instanceof Array) ? [] : {};
-  for (i in this) {
-    if (i == 'clone') continue;
-    if (this[i] && typeof this[i] == "object") {
-      newObj[i] = this[i].clone();
-    } else newObj[i] = this[i]
-  } return newObj;
+	this.memo = function(){
+		return _memo;
+	};
+
+	this.single = function(index){
+		return _single[index];
+	};
+
+	this.width = function(){
+		return _root.width();
+	};
 };

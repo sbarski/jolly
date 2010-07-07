@@ -27,6 +27,10 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 	var tickIteration = 0;
 	var tickInterval = null;
 	
+	//a purely decorative trail
+	//var showTrail = true; 
+	//var trailPosition = [];
+	
 	drawGrid();
 	
 	/* Private: visibleRect */
@@ -39,7 +43,13 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 		//Update the drawing here
 		var cells = board.getAll(visibleRect());
 	
-		gDrawingContext.fillStyle = gBoardColour;
+		// if (showTrail){
+			// gDrawingContext.fillStyle  = gTrailColour;
+		// }
+		// else{
+			gDrawingContext.fillStyle = gBoardColour;
+		//}
+		
 		for (var i = 0; i < oldLifePosition.length; i++)
 		{
 			var x = oldLifePosition[i].x;
