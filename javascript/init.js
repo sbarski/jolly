@@ -9,14 +9,16 @@ var gGridColour = "#FFFF99";
 var gSelectedColour = "#000000";
 var gTrailColour = "#9900FF";
 
-var kBoardWidth = 20;
-var kBoardHeight = 20;
+var kBoardWidth = 10;
+var kBoardHeight = 10;
 
 var kPieceWidth = 25;
 var kPieceHeight= 25;
 
 var kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
 var kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
+
+var isInternetExplorer = false;
 
 /*
  *	Initialise the canvas for graphics display
@@ -36,9 +38,12 @@ function initEngine(canvasElement)
 		 */
 		if (typeof window.G_vmlCanvasManager != "undefined") { 
 			//a friendlier way to check to see if we're in IE emulating Canvas
-            canvasElement=window.G_vmlCanvasManager.initElement(canvasElement);
+            canvasElement = window.G_vmlCanvasManager.initElement(canvasElement);
+			isInternetExplorer = true;
 		} 
 	}
+	
+	//setCanvasDimensions();
 	
 	gCanvasElement = canvasElement;
 	gCanvasElement.width = kPixelWidth;
@@ -66,11 +71,23 @@ function initEngine(canvasElement)
  */
 function setCanvasDimensions()
 {
-	kPieceWidth = Math.floor(document.body.clientWidth / kBoardWidth);
-	kPieceHeight = Math.floor(document.body.clientHeight / kBoardHeight);
+
+	kBoardWidth = Math.floor(viewport().width / kPieceWidth);
+	kBoardHeight = Math.floor(viewport().height / kPieceHeight);
+	
+	//kPieceWidth = Math.floor(document.body.clientWidth / kBoardWidth);
+	//kPieceHeight = Math.floor(document.body.clientHeight / kBoardHeight);
 	
 	kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
 	kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
+}
+
+//http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
+function viewport() {
+var h = document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
+var w = document.getElementsByTagName('body')[0].clientWidth;
+
+return { width : w , height : h }
 }
 
 /*

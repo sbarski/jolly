@@ -18,8 +18,6 @@ function mapid(tup){
 	}
 		
 	return indexedNodes;
-	//"Every node gets an integer id; we use tuples of ids to index nodes."
-	//return map(lambda x: x.id, tup); <-- not implemented
 }
 
 
@@ -40,8 +38,6 @@ function LifeNode(board, id, children){ //Class LifeNode
 
 		this._level = this.nw.level() + 1;
 		this._count = this.nw.count() + this.ne.count() + this.sw.count() + this.se.count();
-		
-		//console.log("LifeNode: " + id + ", " + this._count);
 	 }
 	 
     this._id = id;
@@ -175,25 +171,32 @@ LifeNode.prototype.nextCenter = function(steps){
 	
 	var result;
 	
+	var nwChildren; var neChildren; var swChildren; var seChildren;
+	
 	if (this._level == 2)
 	{
-
-		var nwChildren = mapid(this.nw.children());
+		if (isInternetExplorer === false)
+		{
+			nwChildren = this.nw.children().map(function(n){return n.id()});
+			neChildren = this.ne.children().map(function(n){return n.id()});
+			swChildren = this.sw.children().map(function(n){return n.id()});
+			seChildren = this.se.children().map(function(n){return n.id()});
+		}
+		else
+		{
+			nwChildren = mapid(this.nw.children());
+			neChildren = mapid(this.ne.children());
+			swChildren = mapid(this.sw.children());
+			seChildren = mapid(this.se.children());
+		}
+	
 		var aa = nwChildren[0]; var ab = nwChildren[1]; var ba = nwChildren[2]; var bb = nwChildren[3];
 		
-		var neChildren = mapid(this.ne.children());
 		var ac = neChildren[0]; var ad = neChildren[1]; var bc = neChildren[2]; var bd = neChildren[3];
 		
-		var swChildren = mapid(this.sw.children());
 		var ca = swChildren[0]; var cb = swChildren[1]; var da = swChildren[2]; var db = swChildren[3];
 		
-		var seChildren = mapid(this.se.children());
 		var cc = seChildren[0]; var cd = seChildren[1]; var dc = seChildren[2]; var dd = seChildren[3];
-		
-		// aa, ab, ba, bb = mapid(this.nw.children);
-		// ac, ad, bc, bd = mapid(this.ne.children);
-		// ca, cb, da, db = mapid(this.sw.children);
-		// cc, cd, dc, dd = mapid(this.se.children);
       
 		var nwscore = lifeScore(bb, aa + ab + ac + ba + bc + ca + cb + cc);
 		var nescore = lifeScore(bc, ab + ac + ad + bb + bd + cb + cc + cd);

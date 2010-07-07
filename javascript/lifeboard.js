@@ -12,7 +12,7 @@ function mapSingleToTuple(single, tup){
 }
 
 function LifeBoard(){
-	var that = this;
+	var that = this; //This is a workaround for an error in the ECMAScript Language Specification which causes this to be set incorrectly for inner functions.
 
 	var _root = null;
 	
@@ -30,10 +30,16 @@ function LifeBoard(){
 	{
 		tup = [i & 1, (i & 2) / 2, (i & 4) / 4, (i & 8) / 8];
 	  
-		//var objtup = map(lambda x: _single[x], tup); //<-- not implemented yet
-		var objtup = mapSingleToTuple(_single, tup);
+		var objtup = [];
 	  
-		_memo[tup] = new LifeNode(this, i + 2, objtup); //<-- not implemented yet
+		if (isInternetExplorer === false){
+			objtup = tup.map(function(n){return _single[n]}); //array.map is not supported by IE7
+		}
+		else{
+			objtup = mapSingleToTuple(_single, tup);
+		}
+	  
+		_memo[tup] = new LifeNode(this, i + 2, objtup); 
 	}
 	 
 		var index = [0,0,0,0];
@@ -102,14 +108,10 @@ function LifeBoard(){
 						break;
 					}
 					sub = null;
-					//return; //--? I think
 				}
 				
 				if (sub === null)
 					return;
-				//if (_root.count != sub.count){
-				//	return;
-				//}		
 		}
 	};
 	
@@ -150,8 +152,6 @@ function LifeBoard(){
 			_memo[tup] = result;
 		}
 		
-		//console.log("lifeboard.getnode");
-		
 		return result;
 	};
 
@@ -163,7 +163,7 @@ function LifeBoard(){
 		return _root.get(x - _originx, y - _originy);
 	};
 	
-	this.getAll = function(rect){ //rect = None
+	this.getAll = function(rect){
 		cells = [];
 		_root.getList(cells, _originx, _originy, rect);
 		return cells;
@@ -174,7 +174,6 @@ function LifeBoard(){
 			return;
 		}
 		  
-		//console.log("lifeboard.set");
 		var width = _root.width();
 		
 		while (x < _originx || y < _originy || x >= _originx + width || y >= _originy + width)
@@ -221,8 +220,8 @@ function LifeBoard(){
 		
 		for (var i = 0; i < 16; i++)
 		{
-			var tup = [i & 1, (i & 2) / 2, (i & 4) / 4, (i & 8) / 8]; //<-- not implemented
-			_memo[tup] = old[tup]; //<-- not implemented
+			var tup = [i & 1, (i & 2) / 2, (i & 4) / 4, (i & 8) / 8]; 
+			_memo[tup] = old[tup];
 		}
 		
 		var trans = [];
