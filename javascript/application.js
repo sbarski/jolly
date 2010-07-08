@@ -5,6 +5,7 @@
  */ 
 function LifeGame(boardWidth, boardHeight, drawingContext)
 {
+	var that = this;
 	var board = new LifeBoard();
 
 	var boardWidth = boardWidth;
@@ -26,6 +27,8 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 	var tickSpeed = 100;
 	var tickIteration = 0;
 	var tickInterval = null;
+	
+	var showGrid = true;
 	
 	//a purely decorative trail
 	//var showTrail = true; 
@@ -172,25 +175,10 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 		redraw();
 	};
 	
-	this.zoom = function(level){
-		if (level == 0)
-		{	
-			kPieceWidth = 25;
-			kPieceHeight = 25;
-		}
-		else if (level > 0)
-		{
-			kPieceWidth += 5;
-			kPieceHeight += 5;
-		}
-		else
-		{
-			kPieceWidth -= 5;
-			kPieceHeight -= 5;
-		}
-		
-		kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
-		kPixelHeight = 1 + (kBoardHeight * kPieceHeight);
+	this.zoom = function(level, gBoardWidth, gBoardHeight, gDrawingContext){
+		that.drawingContext = gDrawingContext;
+		boardWidth = gBoardWidth;
+		boardHeight = gBoardHeight;
 		
 		drawGrid();
 		redraw();

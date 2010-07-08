@@ -9,6 +9,7 @@
   <![endif]-->
   
   <script type="text/javascript" src="javascript/library/functional.js"></script>  
+  <script type="text/javascript" src="javascript/library/filesystem.js"></script>  
   <script type="text/javascript" src="javascript/lifenode.js"></script>  
   <script type="text/javascript" src="javascript/lifeboard.js"></script>  
   <script type="text/javascript" src="javascript/application.js"></script>
@@ -31,6 +32,11 @@
 </div>
 <div id="canvasSpace"></div>
 <div id="steps">Generations: 0</div>
+
+<input type="file" id="file" name="file" />
+<button onclick="abortRead();">Cancel read</button>
+<div id="progress_bar"><div class="percent">0%</div></div>
+
 
 </body>
 

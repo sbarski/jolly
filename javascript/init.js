@@ -1,5 +1,6 @@
 var gCanvasElement = null;
 var gDrawingContext = null;
+var fileSystem = null;
 
 var lifeGame = null;
 
@@ -43,7 +44,7 @@ function initEngine(canvasElement)
 		} 
 	}
 	
-	//setCanvasDimensions();
+	setCanvasDimensions();
 	
 	gCanvasElement = canvasElement;
 	gCanvasElement.width = kPixelWidth;
@@ -63,6 +64,9 @@ function initEngine(canvasElement)
         alert("Your browser will not work for this example.");
     }
 	
+	fileSystem = new FileSystem();
+	document.getElementById('file').addEventListener('change', fileSystem.handleFileSelect, false);
+
 	lifeGame = new LifeGame(kBoardWidth, kBoardHeight, gDrawingContext);
 }
 
@@ -78,8 +82,8 @@ function setCanvasDimensions()
 	//kPieceWidth = Math.floor(document.body.clientWidth / kBoardWidth);
 	//kPieceHeight = Math.floor(document.body.clientHeight / kBoardHeight);
 	
-	kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
-	kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
+	kPixelWidth = 1 + (Math.floor(kBoardWidth * 0.75) * kPieceWidth);
+	kPixelHeight= 1 + (Math.floor(kBoardHeight * 0.8) * kPieceHeight);
 }
 
 //http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
@@ -152,7 +156,30 @@ function clear()
 
 function zoom(level)
 {
-	lifeGame.zoom(level);
+	if (level == 0)
+	{	
+		kPieceWidth = 25;
+		kPieceHeight = 25;
+	}
+	else if (level > 0 && (kPieceWidth < 25 && kPieceHeight < 25))
+	{
+		kPieceWidth += 5;
+		kPieceHeight += 5;
+	}
+	else if (level < 0 && (kPieceWidth > 5 && kPieceHeight > 5))
+	{
+		kPieceWidth -= 5;
+		kPieceHeight -= 5;
+	}
+
+	setCanvasDimensions();
+	
+	gCanvasElement.width = kPixelWidth;
+    gCanvasElement.height = kPixelHeight;
+	
+	gDrawingContext = gCanvasElement.getContext("2d");
+
+	lifeGame.zoom(level, kBoardWidth, kBoardHeight, gDrawingContext);
 }
 
 /*
