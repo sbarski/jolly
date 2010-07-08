@@ -150,6 +150,11 @@ function clear()
 	lifeGame.clear();
 }
 
+function zoom(level)
+{
+	lifeGame.zoom(level);
+}
+
 /*
  *  Stores the cell row and column that the user clicked on
  */

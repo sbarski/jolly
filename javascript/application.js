@@ -172,6 +172,30 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 		redraw();
 	};
 	
+	this.zoom = function(level){
+		if (level == 0)
+		{	
+			kPieceWidth = 25;
+			kPieceHeight = 25;
+		}
+		else if (level > 0)
+		{
+			kPieceWidth += 5;
+			kPieceHeight += 5;
+		}
+		else
+		{
+			kPieceWidth -= 5;
+			kPieceHeight -= 5;
+		}
+		
+		kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
+		kPixelHeight = 1 + (kBoardHeight * kPieceHeight);
+		
+		drawGrid();
+		redraw();
+	};
+	
 	/* For Testing */
 	this.board = function(){
 		return board;
