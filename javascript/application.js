@@ -24,10 +24,9 @@ function LifeGame()
 	var offsetx = 0;
 	
 	var curx = 0;
-	var cury = 0
+	var cury = 0;
 	
 	var tickSpeed = 100;
-	var tickIteration = 0;
 	var tickInterval = null;
 	
 	var showGrid = true;
@@ -41,10 +40,11 @@ function LifeGame()
 	/* Private: visibleRect */
 	function visibleRect(){
 		return new Rect(offsetx, offsety, offsetx + data.boardWidth, offsety + data.boardHeight);
-	};
+	}
 	
 	/* Private: redraw */
 	function redraw(){
+	
 		//Update the drawing here
 		var cells = board.getAll(visibleRect());
 	
@@ -77,7 +77,7 @@ function LifeGame()
 		}
 	
 		document.getElementById("steps").innerHTML = "Steps: " + simulationSteps;
-	};
+	}
 	
 	function update(x, y){
 		if (curx >= offsetx && curx < offsetx + data.boardWidth && cury >= offsety && cury < offsety + data.boardHeight)
@@ -95,7 +95,7 @@ function LifeGame()
 				data.drawingContext.fillRect(x*data.pieceWidth+1, y*data.pieceHeight+1, data.pieceWidth-1, data.pieceHeight-1);
 			}
 		}
-	};
+	}
 	
 	
 	/*
@@ -103,14 +103,18 @@ function LifeGame()
 	 */
 	function drawGrid()
 	{
+		
 		data.drawingContext.clearRect(0, 0, data.pixelWidth(), data.pixelHeight());
+
+		data.drawingContext.save();
 		
 		data.drawingContext.fillStyle = data.boardColour;
 		data.drawingContext.fillRect(0, 0, data.pixelWidth(), data.pixelHeight());
 		
 		data.drawingContext.fillStyle = data.selectedColour;
 		data.drawingContext.strokeStyle = data.borderColour;
-
+		
+		data.drawingContext.beginPath();
 		/* vertical lines */
 		for (var x = offsetx; x <= data.pixelWidth(); x += data.pieceWidth) {
 			data.drawingContext.moveTo(0.5 + x, 0);
@@ -123,9 +127,13 @@ function LifeGame()
 			data.drawingContext.lineTo(data.pixelWidth(), 0.5 +  y);
 		}
 		
+		data.drawingContext.closePath();
+
 		/* draw it! */
 		data.drawingContext.strokeStyle = data.gridColour;
 		data.drawingContext.stroke();
+		
+		data.drawingContext.restore();
 	};
 	
 	/* Privildged Methods */
@@ -143,15 +151,17 @@ function LifeGame()
 	this.stop = function(){
 		isSimulationRunning = false;
 		
-		if (tickInterval !== null)
+		if (tickInterval !== null){
 			clearInterval(tickInterval);
+		}
 	};
 
 	this.clear = function(){
 		isSimulationRunning = false;
 		
-		if (tickInterval !== null)
+		if (tickInterval !== null){
 			clearInterval(tickInterval);
+		}
 			
 		simulationSteps = 0;
 			
@@ -174,8 +184,9 @@ function LifeGame()
 			return;
 		}
 	
-		if (board.root().width() > Math.pow(2,28)) 
+		if (board.root().width() > Math.pow(2,28)) {
 			board.collect();
+		}
 			
 		board.step(steps);
 		simulationSteps += steps;
@@ -184,10 +195,6 @@ function LifeGame()
 	};
 	
 	this.zoom = function(level){
-		//that.drawingContext = data.drawingContext;
-		//boardWidth = gBoardWidth;
-		//boardHeight = gBoardHeight;
-		
 		drawGrid();
 		redraw();
 	};

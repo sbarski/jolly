@@ -18,8 +18,8 @@ var data = {
 		boardWidth : 1600,
 		boardHeight : 800,
 
-		pieceWidth : 20,
-		pieceHeight : 20,
+		pieceWidth : 40,
+		pieceHeight : 40,
 
 		isInternetExplorer : false,
 		
@@ -34,11 +34,12 @@ var data = {
 
 /* The game of life! */
 var lifeGame = null;
+var canvasElement = null;
 
 /*
  *	Initialise the canvas for graphics, mouse and create the game
  */
-function initEngine(canvasElement)
+function initEngine()
 {
 	/* Create and Init canvas */
 	canvasElement = document.createElement("canvas");
@@ -170,7 +171,7 @@ function zoom(level){
 		data.pieceWidth = 20;
 		data.pieceHeight = 20;
 	}
-	else if (level > 0 && (data.pieceWidth < 25 && data.pieceHeight < 25))
+	else if (level > 0 && (data.pieceWidth < 80 && data.pieceHeight < 80))
 	{
 		data.pieceWidth *= 2;
 		data.pieceHeight *= 2;
@@ -181,15 +182,7 @@ function zoom(level){
 		data.pieceHeight /= 2;
 	}
 	
-	data.canvasElement.width = data.boardWidth;
-    data.canvasElement.height = data.boardHeight;
-
 	setCanvasDimensions();
-	
-	//data.canvasElement.width = kPixelWidth;
-    //data.canvasElement.height = kPixelHeight;
-	
-	//data.drawingContext = gCanvasElement.getContext("2d");
 
 	lifeGame.zoom(level);
 }

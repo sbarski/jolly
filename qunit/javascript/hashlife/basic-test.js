@@ -2,8 +2,8 @@
 
 module("setup/teardown test", {
 	setup: function(){
-		kBoardWidth = 10;
-		kBoardHeight = 10;
+		data.boardWidth = 10;
+		data.boardHeight = 10;
 		var hashlife = initEngine(null);
 		ok(true);
 	},
@@ -16,9 +16,9 @@ module("setup/teardown test", {
 test("check that canvas element and the drawing context are ok", function() {
 	expect(5);
 	
-	ok(gCanvasElement, "canvas element: OK");
-	ok(gDrawingContext, "drawing context: OK");
-	ok(kBoardWidth >= 10 && kBoardHeight >= 10, "board dimensions: OK");
+	ok(data.canvasElement, "canvas element: OK");
+	ok(data.drawingContext, "drawing context: OK");
+	ok(data.boardWidth >= 10 && data.boardHeight >= 10, "board dimensions: OK");
 });
 
 
