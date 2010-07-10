@@ -1,73 +1,87 @@
-var gCanvasElement = null;
-var gDrawingContext = null;
-var fileSystem = null;
+var data = {
+	//return {
+		/* Drawing */
+		canvasElement : null,
+		drawingContext : null,
+		
+		/* File Processing */
+		fileSystem : null,
 
+		/* Cosmetics */
+		boardColour : "#ccc",
+		borderColour : "#000",
+		gridColour : "#FFFF99",
+		selectedColour : "#000000",
+		trailColour : "#9900FF",
+
+		/* Canvas Dimensions */
+		boardWidth : 1600,
+		boardHeight : 800,
+
+		pieceWidth : 20,
+		pieceHeight : 20,
+
+		isInternetExplorer : false,
+		
+		pixelWidth: function(){
+			return 1 + this.boardWidth;
+		},
+			
+		pixelHeight: function(){
+			return 1 + this.boardHeight;
+		}
+};
+
+/* The game of life! */
 var lifeGame = null;
 
-var gBoardColour = "#ccc";
-var gBorderColour = "#000";
-var gGridColour = "#FFFF99";
-var gSelectedColour = "#000000";
-var gTrailColour = "#9900FF";
-
-var kBoardWidth = 10;
-var kBoardHeight = 10;
-
-var kPieceWidth = 25;
-var kPieceHeight= 25;
-
-var kPixelWidth = 1 + (kBoardWidth * kPieceWidth);
-var kPixelHeight= 1 + (kBoardHeight * kPieceHeight);
-
-var isInternetExplorer = false;
-
 /*
- *	Initialise the canvas for graphics display
+ *	Initialise the canvas for graphics, mouse and create the game
  */
 function initEngine(canvasElement)
 {
-	if (canvasElement == null)
-	{
-		canvasElement = document.createElement("canvas");
-		canvasElement.id = "lifegame_canvas";
-		document.getElementById("canvasSpace").appendChild(canvasElement);
+	/* Create and Init canvas */
+	canvasElement = document.createElement("canvas");
+	canvasElement.id = "lifegame_canvas";
+	document.getElementById("canvasSpace").appendChild(canvasElement);
 		
-		/*
-		 * If canvas is created on the fly with javascript in IE it will be imposible to get its context
-		 * Therefore we need to do some magic to instantiate the element
-		 * http://groups.google.com/group/google-excanvas/browse_thread/thread/b73e8820a43344e0
-		 */
-		if (typeof window.G_vmlCanvasManager != "undefined") { 
-			//a friendlier way to check to see if we're in IE emulating Canvas
-            canvasElement = window.G_vmlCanvasManager.initElement(canvasElement);
-			isInternetExplorer = true;
-		} 
-	}
+	/*
+	* If canvas is created on the fly with javascript in IE it will be imposible to get its context
+	* Therefore we need to do some magic to instantiate the element
+	 * http://groups.google.com/group/google-excanvas/browse_thread/thread/b73e8820a43344e0
+	 */
+	if (typeof window.G_vmlCanvasManager != "undefined") { 
+		//a friendlier way to check to see if we're in IE emulating Canvas
+		canvasElement = window.G_vmlCanvasManager.initElement(canvasElement);
+		isInternetExplorer = true;
+	} 
 	
+	/* Set the dimensions of the canvas */
 	setCanvasDimensions();
 	
-	gCanvasElement = canvasElement;
-	gCanvasElement.width = kPixelWidth;
-    gCanvasElement.height = kPixelHeight;
+	data.canvasElement = canvasElement;
+	data.canvasElement.width = data.boardWidth;
+    data.canvasElement.height = data.boardHeight;
 	
-	gDrawingContext = gCanvasElement.getContext("2d");
+	data.drawingContext = canvasElement.getContext("2d");
 	
 	/*
 	 * IE handles click events differently to other browsers
 	 * http://www.xml.com/lpt/a/1656
 	 */
-	if (gCanvasElement.addEventListener) {
-        gCanvasElement.addEventListener("click", onMouseClick, false);
-    } else if (gCanvasElement.attachEvent) {
-        gCanvasElement.attachEvent("onclick", onMouseClick);
+	if (data.canvasElement.addEventListener) {
+        data.canvasElement.addEventListener("click", onMouseClick, false);
+    } else if (data.canvasElement.attachEvent) {
+        data.canvasElement.attachEvent("onclick", onMouseClick);
     } else {
         alert("Your browser will not work for this example.");
     }
-	
-	fileSystem = new FileSystem();
-	document.getElementById('file').addEventListener('change', fileSystem.handleFileSelect, false);
 
-	lifeGame = new LifeGame(kBoardWidth, kBoardHeight, gDrawingContext);
+	data.fileSystem = new FileSystem();
+	
+	document.getElementById("file").addEventListener("change", data.fileSystem.handleFileSelect, false);
+
+	lifeGame = new LifeGame();
 }
 
 /*
@@ -75,23 +89,23 @@ function initEngine(canvasElement)
  */
 function setCanvasDimensions()
 {
-
-	kBoardWidth = Math.floor(viewport().width / kPieceWidth);
-	kBoardHeight = Math.floor(viewport().height / kPieceHeight);
 	
-	//kPieceWidth = Math.floor(document.body.clientWidth / kBoardWidth);
-	//kPieceHeight = Math.floor(document.body.clientHeight / kBoardHeight);
+	//data.boardWidth = Math.floor(viewport().width / data.pieceWidth);
+	//data.boardHeight = Math.floor(viewport().height / data.pieceHeight);
 	
-	kPixelWidth = 1 + (Math.floor(kBoardWidth * 0.75) * kPieceWidth);
-	kPixelHeight= 1 + (Math.floor(kBoardHeight * 0.8) * kPieceHeight);
+	//data.pieceWidth = Math.floor(document.body.clientWidth / data.boardWidth);
+	//data.pieceHeight = Math.floor(document.body.clientHeight / data.boardHeight);
+	
+	//kPixelWidth = 1 + (Math.floor(data.boardWidth) * data.pieceWidth);
+	//kPixelHeight= 1 + (Math.floor(data.boardHeight	) * data.pieceHeight);
 }
 
 //http://andylangton.co.uk/articles/javascript/get-viewport-size-javascript/
 function viewport() {
-var h = document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
-var w = document.getElementsByTagName('body')[0].clientWidth;
+	var h = document.documentElement.clientHeight || document.getElementsByTagName('body')[0].clientHeight;
+	var w = document.getElementsByTagName('body')[0].clientWidth;
 
-return { width : w , height : h }
+	return { width : 1200 , height : 600 }
 }
 
 /*
@@ -122,71 +136,68 @@ function getCursorPosition(e)
 		y = e.clientY + document.documentElement.scrollTop + document.body.scrollTop;
     }
     
-	x -= gCanvasElement.offsetLeft;
-    y -= gCanvasElement.offsetTop;
+	x -= data.canvasElement.offsetLeft;
+    y -= data.canvasElement.offsetTop;
 	
-    x = Math.min(x, kBoardWidth * kPieceWidth);
-    y = Math.min(y, kBoardHeight * kPieceHeight);
+    x = Math.min(x, data.boardWidth * data.pieceWidth);
+    y = Math.min(y, data.boardHeight * data.pieceHeight);
     
-	var rect = new Rect(Math.floor(x/kPieceHeight),Math.floor(y/kPieceWidth));
+	var rect = new Rect(Math.floor(x/data.pieceHeight),Math.floor(y/data.pieceWidth));
 
 	return rect;
 
 }
 
-function step()
-{
+function step(){
 	lifeGame.step(1);
 }
 
-function run()
-{
+function run(){
 	lifeGame.run();
 }
 
-function stop()
-{
+function stop(){
 	lifeGame.stop();
 }
 
-function clear()
-{
+function clear(){
 	lifeGame.clear();
 }
 
-function zoom(level)
-{
+function zoom(level){
 	if (level == 0)
 	{	
-		kPieceWidth = 25;
-		kPieceHeight = 25;
+		data.pieceWidth = 20;
+		data.pieceHeight = 20;
 	}
-	else if (level > 0 && (kPieceWidth < 25 && kPieceHeight < 25))
+	else if (level > 0 && (data.pieceWidth < 25 && data.pieceHeight < 25))
 	{
-		kPieceWidth += 5;
-		kPieceHeight += 5;
+		data.pieceWidth *= 2;
+		data.pieceHeight *= 2;
 	}
-	else if (level < 0 && (kPieceWidth > 5 && kPieceHeight > 5))
+	else if (level < 0 && (data.pieceWidth > 5 && data.pieceHeight > 5))
 	{
-		kPieceWidth -= 5;
-		kPieceHeight -= 5;
+		data.pieceWidth /= 2;
+		data.pieceHeight /= 2;
 	}
+	
+	data.canvasElement.width = data.boardWidth;
+    data.canvasElement.height = data.boardHeight;
 
 	setCanvasDimensions();
 	
-	gCanvasElement.width = kPixelWidth;
-    gCanvasElement.height = kPixelHeight;
+	//data.canvasElement.width = kPixelWidth;
+    //data.canvasElement.height = kPixelHeight;
 	
-	gDrawingContext = gCanvasElement.getContext("2d");
+	//data.drawingContext = gCanvasElement.getContext("2d");
 
-	lifeGame.zoom(level, kBoardWidth, kBoardHeight, gDrawingContext);
+	lifeGame.zoom(level);
 }
 
 /*
  *  Stores the cell row and column that the user clicked on
  */
-function Rect(x, y, width, height)
-{
+function Rect(x, y, width, height){
 	this.x = x;
 	this.y = y;
 	this.width = width;

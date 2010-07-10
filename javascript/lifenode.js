@@ -148,7 +148,7 @@ function LifeNode(board, id, children){ //Class LifeNode
 		
 		if (this._level == 2)
 		{
-			if (isInternetExplorer === false)
+			if (data.isInternetExplorer === false)
 			{
 				nwChildren = nw.children().map(function(n){return n.id()});
 				neChildren = ne.children().map(function(n){return n.id()});

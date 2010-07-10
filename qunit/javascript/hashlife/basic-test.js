@@ -75,6 +75,8 @@ test("visible rect", function() {
 	lifeGame.toggle(10,9);
 	lifeGame.toggle(10,10);
 	
+	setCanvasDimensions(10,10);
+	
 	var board = lifeGame.board();
 	var visibleRect = lifeGame.getVisibleRect();
 	var cells = board.getAll(visibleRect);

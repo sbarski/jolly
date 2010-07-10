@@ -3,13 +3,19 @@
 <head>
 	<title>QUnit Test Suite</title>
 	<link rel="stylesheet" href="stylesheets/qunit.css" type="text/css" media="screen">
-	<script type="text/javascript" src="javascript/qunit.js"></script>
-	<script type="text/javascript" src="javascript/hashlife/basic-test.js"></script>
-	  
+	
+	<script type="text/javascript" src="../javascript/library/filesystem.js"></script>  
+	
 	<script type="text/javascript" src="../javascript/lifenode.js"></script>  
 	<script type="text/javascript" src="../javascript/lifeboard.js"></script>  
 	<script type="text/javascript" src="../javascript/application.js"></script>
 	<script type="text/javascript" src="../javascript/init.js"></script>
+	
+	<script type="text/javascript" src="javascript/qunit.js"></script>
+	<script type="text/javascript" src="javascript/hashlife/basic-test.js"></script>
+	  
+
+
 </head>
 <body>
 	
@@ -19,7 +25,12 @@
 	<h2 id="qunit-userAgent"></h2>
 	<ol id="qunit-tests"></ol>
 	
-	<div id="canvasSpace" style="display:none"></div>
-	<div id="steps" style="display:none">Steps: 0</div>
+
+		<div id="canvasSpace"></div>
+		<div id="steps">Generations: 0</div>
+		
+		<input type="file" id="file" name="file" />
+		<button onclick="abortRead();">Cancel read</button>
+		<div id="progress_bar"><div class="percent">0%</div></div>
 </body>
 </html>

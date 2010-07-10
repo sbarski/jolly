@@ -47,7 +47,7 @@ function FileSystem(){
 		  }
 		}
 	};
-
+	
 	this.handleFileSelect = function(evt){
 		// Reset progress indicator on new file selection.
 		progress.style.width = '0%';
@@ -67,11 +67,118 @@ function FileSystem(){
 		  progress.style.width = '100%';
 		  progress.textContent = '100%';
 		  setTimeout("document.getElementById('progress_bar').className='';", 2000);
-		  document.getElementById('progress_bar').innerHTML = e.target.result;
+		 processFile(e.target.result);
 		}
 
 		// Read in the image file as a binary string.
 		reader.readAsText(evt.target.files[0]);
 	};
+};
+
+/* Process File Format */
+function processFile(data){
+	var result;
+	
+	var lines = data.split("\r\n");
+
+	for (var i = 0; i < lines.length; i++)
+	{
+			if (lines[i][0] === "!" || lines[i][0] === "#")  //remove comment lines
+			{
+				lines.splice(i,1);
+				i--;
+			}
+	}
+	
+	if (lines[0][0] === "." || lines[0][0] === "O"){ //we are dealing with raw file format
+		lifeGame.loadData(processRawFormat(lines));
+	}
+	else if (lines[0][0] === "x"){
+		lines.splice(0,1); //get rid of the first line
+		lifeGame.loadData(processRLE(lines));
+	}
+	
+	function processRawFormat(lines)
+	{
+		var result = [];
+	
+		for (var i = 0; i < lines.length; i++)
+		{
+			for (var j = 0; j < lines[i].length; j++)
+			{
+				if (lines[i][j] === "O"){
+					result.push([i,j]);
+				}					
+			}
+		}
+		
+		return result;
+	}
+	
+	function processRLE(lines)
+	{
+		var y = 0;
+		var x = 0;
+		var accum = "0";
+		var result = [];
+		
+		for (var i = 0; i < lines.length; i++)
+		{
+			for (var j = 0; j < lines[i].length; j++)
+			{
+				if (lines[i][j] === "b"){ //the cell is dead
+					var accumValue = parseInt(accum, 10);
+					
+					if (accumValue === 0){
+						x++; //we assume that it is actually +1 according to the rules
+					}
+					else{
+						x += accumValue;
+					}
+					
+					accum = "0";
+					
+					//x = parseInt(accum, 10);
+					//accum = "1";
+				}
+				else if (lines[i][j] === "o"){ //the cell is alive
+					// if (parseInt(accum, 10) === 0)
+					// {
+						// result.push([x+1, y]);
+					// }
+					// else
+					// {
+					var accumValue = parseInt(accum, 10);
+					
+					if (accumValue === 0)
+					{
+						x++;
+						result.push([x-1,y]);
+					}
+					else
+					{
+						for (var k = 1; k <= accumValue; k++){
+							result.push([x+k-1, y]);
+						}
+						
+						x += accumValue;
+					}
+					// }
+					accum = "0";
+				}
+				else if (lines[i][j] === "$"){ //new row
+					x = 0;
+					y++;
+					accum = "0";
+				}
+				else{
+					accum += lines[i][j];
+				}
+			}
+		}
+		
+		return result;
+		
+	}
 };
 

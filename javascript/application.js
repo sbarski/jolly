@@ -3,14 +3,16 @@
 /*
  * Applications
  */ 
-function LifeGame(boardWidth, boardHeight, drawingContext)
+function LifeGame()
 {
 	var that = this;
 	var board = new LifeBoard();
+	
+	var fileSystem = new FileSystem();
 
-	var boardWidth = boardWidth;
-	var boardHeight = boardHeight;
-	var drawingContext = drawingContext;
+	// var boardWidth = boardWidth;
+	// var boardHeight = boardHeight;
+	// var drawingContext = drawingContext;
 	
 	var simulationSteps = 0;
 	
@@ -38,7 +40,7 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 	
 	/* Private: visibleRect */
 	function visibleRect(){
-		return new Rect(offsetx, offsety, offsetx + boardWidth, offsety + boardHeight);
+		return new Rect(offsetx, offsety, offsetx + data.boardWidth, offsety + data.boardHeight);
 	};
 	
 	/* Private: redraw */
@@ -47,10 +49,10 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 		var cells = board.getAll(visibleRect());
 	
 		// if (showTrail){
-			// gDrawingContext.fillStyle  = gTrailColour;
+			// data.drawingContext.fillStyle  = gTrailColour;
 		// }
 		// else{
-			gDrawingContext.fillStyle = gBoardColour;
+			data.drawingContext.fillStyle = data.boardColour;
 		//}
 		
 		for (var i = 0; i < oldLifePosition.length; i++)
@@ -58,18 +60,18 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 			var x = oldLifePosition[i].x;
 			var y = oldLifePosition[i].y;
 		
-			gDrawingContext.fillRect(x*kPieceWidth+1, y*kPieceHeight+1, kPieceWidth-1, kPieceHeight-1);
+			data.drawingContext.fillRect(x*data.pieceWidth+1, y*data.pieceHeight+1, data.pieceWidth-1, data.pieceHeight-1);
 		}
 	
 		oldLifePosition = [];
 
-		gDrawingContext.fillStyle = gSelectedColour;
+		data.drawingContext.fillStyle = data.selectedColour;
 		for (var position = 0; position < cells.length; position++)
 		{
 			var x = cells[position][0]
 			var y = cells[position][1];
 		
-			gDrawingContext.fillRect(x*kPieceWidth+1, y*kPieceHeight+1, kPieceWidth-1, kPieceHeight-1);	
+			data.drawingContext.fillRect(x*data.pieceWidth+1, y*data.pieceHeight+1, data.pieceWidth-1, data.pieceHeight-1);	
 
 			oldLifePosition.push(new Rect(x,y,0,0));
 		}
@@ -78,19 +80,19 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 	};
 	
 	function update(x, y){
-		if (curx >= offsetx && curx < offsetx + boardWidth && cury >= offsety && cury < offsety + boardHeight)
+		if (curx >= offsetx && curx < offsetx + data.boardWidth && cury >= offsety && cury < offsety + data.boardHeight)
 		{
 			if (board.get(x, y))
 			{
 				oldLifePosition.push(new Rect(x,y,0,0));
 			
-				gDrawingContext.fillStyle = gSelectedColour;
-				gDrawingContext.fillRect(x*kPieceWidth+1, y*kPieceHeight+1, kPieceWidth-1, kPieceHeight-1);
+				data.drawingContext.fillStyle = data.selectedColour;
+				data.drawingContext.fillRect(x*data.pieceWidth+1, y*data.pieceHeight+1, data.pieceWidth-1, data.pieceHeight-1);
 			}
 			else
 			{
-				gDrawingContext.fillStyle = gBoardColour;
-				gDrawingContext.fillRect(x*kPieceWidth+1, y*kPieceHeight+1, kPieceWidth-1, kPieceHeight-1);
+				data.drawingContext.fillStyle = data.boardColour;
+				data.drawingContext.fillRect(x*data.pieceWidth+1, y*data.pieceHeight+1, data.pieceWidth-1, data.pieceHeight-1);
 			}
 		}
 	};
@@ -101,29 +103,29 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 	 */
 	function drawGrid()
 	{
-		gDrawingContext.clearRect(0, 0, kPixelWidth, kPixelHeight);
+		data.drawingContext.clearRect(0, 0, data.pixelWidth(), data.pixelHeight());
 		
-		gDrawingContext.fillStyle = gBoardColour;
-		gDrawingContext.fillRect(0, 0, kPixelWidth, kPixelHeight);
+		data.drawingContext.fillStyle = data.boardColour;
+		data.drawingContext.fillRect(0, 0, data.pixelWidth(), data.pixelHeight());
 		
-		gDrawingContext.fillStyle = gSelectedColour;
-		gDrawingContext.strokeStyle = gBorderColour;
+		data.drawingContext.fillStyle = data.selectedColour;
+		data.drawingContext.strokeStyle = data.borderColour;
 
 		/* vertical lines */
-		for (var x = offsetx; x <= kPixelWidth; x += kPieceWidth) {
-			gDrawingContext.moveTo(0.5 + x, 0);
-			gDrawingContext.lineTo(0.5 + x, kPixelHeight);
+		for (var x = offsetx; x <= data.pixelWidth(); x += data.pieceWidth) {
+			data.drawingContext.moveTo(0.5 + x, 0);
+			data.drawingContext.lineTo(0.5 + x, data.pixelHeight());
 		}
 		
 		/* horizontal lines */
-		for (var y = offsety; y <= kPixelHeight; y += kPieceHeight) {
-			gDrawingContext.moveTo(0, 0.5 + y);
-			gDrawingContext.lineTo(kPixelWidth, 0.5 +  y);
+		for (var y = offsety; y <= data.pixelHeight(); y += data.pieceHeight) {
+			data.drawingContext.moveTo(0, 0.5 + y);
+			data.drawingContext.lineTo(data.pixelWidth(), 0.5 +  y);
 		}
 		
 		/* draw it! */
-		gDrawingContext.strokeStyle = gGridColour;
-		gDrawingContext.stroke();
+		data.drawingContext.strokeStyle = data.gridColour;
+		data.drawingContext.stroke();
 	};
 	
 	/* Privildged Methods */
@@ -166,6 +168,12 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 
 
 	this.step = function(steps){
+		steps = parseInt(steps);
+		
+		if (steps <= 0){
+			return;
+		}
+	
 		if (board.root().width() > Math.pow(2,28)) 
 			board.collect();
 			
@@ -175,12 +183,32 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 		redraw();
 	};
 	
-	this.zoom = function(level, gBoardWidth, gBoardHeight, gDrawingContext){
-		that.drawingContext = gDrawingContext;
-		boardWidth = gBoardWidth;
-		boardHeight = gBoardHeight;
+	this.zoom = function(level){
+		//that.drawingContext = data.drawingContext;
+		//boardWidth = gBoardWidth;
+		//boardHeight = gBoardHeight;
 		
 		drawGrid();
+		redraw();
+	};
+	
+	this.load = function(event){
+		var result = fileSystem.handleFileSelect(event);
+	};
+	
+	this.loadData = function(data){
+		this.clear();
+		
+		for (var i = 0; i < data.length; i++)
+		{
+			var curx = data[i][0];
+			var cury = data[i][1];
+		
+			var value = 1 - board.get(curx, cury);
+		
+			board.set(curx, cury, value);
+		}
+		
 		redraw();
 	};
 	
@@ -192,5 +220,7 @@ function LifeGame(boardWidth, boardHeight, drawingContext)
 	this.getVisibleRect = function(){
 		return visibleRect();
 	};
+	
+
 }
 

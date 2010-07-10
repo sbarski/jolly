@@ -32,7 +32,7 @@ function LifeBoard(){
 	  
 		var objtup = [];
 	  
-		if (isInternetExplorer === false){
+		if (data.isInternetExplorer === false){
 			objtup = tup.map(function(n){return _single[n]}); //array.map is not supported by IE7
 		}
 		else{
