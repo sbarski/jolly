@@ -102,9 +102,9 @@ function processFile(data){
 	{
 		var result = [];
 	
-		for (var i = 0; i < lines.length; i++)
+		for (var i = 0, len = lines.length; i < len; i++)
 		{
-			for (var j = 0; j < lines[i].length; j++)
+			for (var j = 0, arraylen = lines[i].length; j < arraylen; j++)
 			{
 				if (lines[i][j] === "O"){
 					result.push([i,j]);
@@ -122,9 +122,9 @@ function processFile(data){
 		var accum = "0";
 		var result = [];
 		
-		for (var i = 0; i < lines.length; i++)
+		for (var i = 0, len = lines.length; i < len; i++)
 		{
-			for (var j = 0; j < lines[i].length; j++)
+			for (var j = 0, arraylen = lines[i].length; j < arraylen; j++)
 			{
 				if (lines[i][j] === "b"){ //the cell is dead
 					var accumValue = parseInt(accum, 10);

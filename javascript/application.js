@@ -26,7 +26,7 @@ function LifeGame()
 	var curx = 0;
 	var cury = 0;
 	
-	var tickSpeed = 100;
+	var tickSpeed = 1;
 	var tickInterval = null;
 	
 	var showGrid = true;
@@ -55,7 +55,7 @@ function LifeGame()
 			data.drawingContext.fillStyle = data.boardColour;
 		//}
 		
-		for (var i = 0; i < oldLifePosition.length; i++)
+		for (var i = 0, len = oldLifePosition.length; i < len; i++)
 		{
 			var x = oldLifePosition[i].x;
 			var y = oldLifePosition[i].y;
@@ -66,7 +66,7 @@ function LifeGame()
 		oldLifePosition = [];
 
 		data.drawingContext.fillStyle = data.selectedColour;
-		for (var position = 0; position < cells.length; position++)
+		for (var position = 0, len = cells.length; position < len; position++)
 		{
 			var x = cells[position][0]
 			var y = cells[position][1];
