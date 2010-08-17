@@ -26,7 +26,7 @@ function LifeGame()
 	var curx = 0;
 	var cury = 0;
 	
-	var tickSpeed = 1;
+	var tickSpeed = 10;
 	var tickInterval = null;
 	
 	var showGrid = true;
