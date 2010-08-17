@@ -4,7 +4,7 @@
 function FileSystem(){
 	var that = this;
 	var reader;
-	var progress = document.querySelector('.percent');
+	//var progress = document.querySelector('.percent');
 
 	function isFileLoadingSupported()
 	{
@@ -55,7 +55,7 @@ function FileSystem(){
 
 		reader = new FileReader();
 		reader.onerror = errorHandler;
-		reader.onprogress = updateProgress;
+		reader.onerror = updateProgress;
 		reader.onabort = function(e) {
 		  alert('File read cancelled');
 		};
