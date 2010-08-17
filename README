@@ -1,7 +1,8 @@
-This is a README for Jolly
+Jolly (inspired by Golly) is an online "Game of Life" simulator implemented with HTML5 and JS
 
-Jolly is an online Game of Life Simulator
+There are a number of features which differentiate Jolly from other online implementation of the game of life. 
 
-It's implemented with HTML5(canvas) and JavaScript
-
-At the moment the hashlife algorithm has been implemented and RLE file loading
+Current Features:
+1. Implements hashlife 
+2. Reads RLE and Cells files
+3. UI (based on canvas) with zoom in/out
