@@ -15,11 +15,11 @@ var data = {
 		trailColour : "#9900FF",
 
 		/* Canvas Dimensions */
-		boardWidth : 1600,
-		boardHeight : 800,
+		boardWidth : 800,
+		boardHeight : 400,
 
-		pieceWidth : 40,
-		pieceHeight : 40,
+		pieceWidth : 20,
+		pieceHeight : 20,
 
 		isInternetExplorer : false,
 		
