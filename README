@@ -1,0 +1,7 @@
+This is a README for Jolly
+
+Jolly is an online Game of Life Simulator
+
+It's implemented with HTML5(canvas) and JavaScript
+
+At the moment the hashlife algorithm has been implemented and RLE file loading
