@@ -50,12 +50,12 @@ function FileSystem(){
 	
 	this.handleFileSelect = function(evt){
 		// Reset progress indicator on new file selection.
-		progress.style.width = '0%';
-		progress.textContent = '0%';
+		//progress.style.width = '0%';
+		//progress.textContent = '0%';
 
 		reader = new FileReader();
 		reader.onerror = errorHandler;
-		reader.onerror = updateProgress;
+		//reader.onerror = updateProgress;
 		reader.onabort = function(e) {
 		  alert('File read cancelled');
 		};
@@ -64,8 +64,8 @@ function FileSystem(){
 		};
 		reader.onload = function(e) {
 		  // Ensure that the progress bar displays 100% at the end.
-		  progress.style.width = '100%';
-		  progress.textContent = '100%';
+		  //progress.style.width = '100%';
+		  //progress.textContent = '100%';
 		  setTimeout("document.getElementById('progress_bar').className='';", 2000);
 		 processFile(e.target.result);
 		}
