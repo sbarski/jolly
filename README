@@ -1,21 +1,21 @@
-Jolly (inspired by Golly) is an implementation of Conway’s Game of Life created using HTML5 and JavaScript.
+Jolly (inspired by Golly) is an implementation of Conway's Game of Life created using HTML5 and JavaScript.
 
 Jolly differs from other online implementations in that it has a number of advanced features. The following is a brief overview of why we think Jolly deserves your attention.
 
 1. No dependencies. Jolly is implemented in pure JavaScript without any external dependencies (lightweight and portable!). Our philosophy is to avoid using frameworks unless absolutely necessary. 
 
-2. No backend. As long as you have a relatively new-ish browser (e.g. Firefox 3) you can use all of Jolly’s features (e.g. file loading) without a backend component. You can host and run it anywhere. Our philosophy is to avoid using a backend server and do everything in JavaScript. 
+2. No backend. As long as you have a relatively new-ish browser (e.g. Firefox 3) you can use all of Jolly's features (e.g. file loading) without a backend component. You can host and run it anywhere. Our philosophy is to avoid using a backend server and do everything in JavaScript. 
 
-3. Hashlife! This is arguably our main contribution to date. Jolly uses hashlife algorithm (http://en.wikipedia.org/wiki/Hashlife) which has been implemented entirely in JavaScript. If you don’t know what hashlife is and why it is a big deal – take a look at the Wikipedia link above.
+3. Hashlife! This is arguably our main contribution to date. Jolly uses the hashlife algorithm (http://en.wikipedia.org/wiki/Hashlife) which has been implemented entirely in JavaScript. If you don't know what hashlife is and why it is a big deal - take a look at the Wikipedia link above.
 
-4. Load pattern files. If you jump to http://www.conwaylife.com/wiki/ you will find hundreds of various pattern files. Jolly can load RLE and Plaintext file so that you don’t have to implement patterns by hand.
+4. Load pattern files. If you jump to http://www.conwaylife.com/wiki/ you will find hundreds of various pattern files. Jolly can load RLE and Plaintext file so that you don't have to implement patterns by hand.
 
 5. UI goodness. Jolly implements the standard UI features you would expect. You can zoom in and out, run, step, stop and clear the canvas. 
 
 
 Planned Features (short term):
 
-1. A spiffier look and feel. We realise that we have to make Jolly more visually appealing. Colours, buttons and nifty visual effects are what we want. If you can help – please do!
+1. A spiffier look and feel. We realise that we have to make Jolly more visually appealing. Colours, buttons and nifty visual effects are what we want. If you can help - please do!
 
 2. Refactoring. Our code is beautiful but not always. One task is to refactor the code to make it more elegant and inspiring.
 
