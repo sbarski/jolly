@@ -24,7 +24,6 @@ function FileSystem() {
       document.getElementById("progress_bar").className = "loading"
     };
     g.onload = function(h) {
-      setTimeout("document.getElementById('progress_bar').className='';", 2E3);
       processFile(h.target.result)
     };
     g.readAsText(f.target.files[0])
