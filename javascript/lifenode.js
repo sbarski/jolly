@@ -312,7 +312,7 @@ function extend(from, to)
 
     for (var name in from)
     {
-        to[name] = typeof to[name] == "undefined" ? this.extend(from[name], null) : to[name];
+        to[name] = typeof to[name] == "undefined" ? extend(from[name], null) : to[name];
     }
 
     return to;
