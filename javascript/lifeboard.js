@@ -28,7 +28,7 @@ function LifeBoard(){
 	
 	for (var i = 0; i < 16; i++)
 	{
-		tup = [i & 1, (i & 2) / 2, (i & 4) / 4, (i & 8) / 8];
+		var tup = [i & 1, (i & 2) / 2, (i & 4) / 4, (i & 8) / 8];
 	  
 		var objtup = [];
 	  
@@ -164,7 +164,7 @@ function LifeBoard(){
 	};
 	
 	this.getAll = function(rect){
-		cells = [];
+		var cells = [];
 		_root.getList(cells, _originx, _originy, rect);
 		return cells;
 	};
